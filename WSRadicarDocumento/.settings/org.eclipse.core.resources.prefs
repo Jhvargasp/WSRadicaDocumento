@@ -1,0 +1,12 @@
+eclipse.preferences.version=1
+encoding//src/com/intent/filenet/cews/WSDLFile/InsertDocRq.java=UTF-8
+encoding//src/com/intent/filenet/cews/WSDLFile/InsertDocRs.java=UTF-8
+encoding//src/com/intent/filenet/cews/WSDLFile/Metadata.java=UTF-8
+encoding//src/com/intent/filenet/cews/WSDLFile/SearchDocRq.java=UTF-8
+encoding//src/com/intent/filenet/cews/WSDLFile/SearchDocRs.java=UTF-8
+encoding//src/com/intent/filenet/cews/WSDLFile/WSDLFileSOAPImpl.java=UTF-8
+encoding//src/com/intent/filenet/cews/WSDLFile/WSDLFileSOAPSkeleton.java=UTF-8
+encoding//src/com/intent/filenet/cews/WSDLFile/WSDLFileSOAPStub.java=UTF-8
+encoding//src/com/intent/filenet/cews/WSDLFile/WSDLFile_PortType.java=UTF-8
+encoding//src/com/intent/filenet/cews/WSDLFile/WSDLFile_Service.java=UTF-8
+encoding//src/com/intent/filenet/cews/WSDLFile/WSDLFile_ServiceLocator.java=UTF-8

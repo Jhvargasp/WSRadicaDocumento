@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://cews.filenet.intent.com/WSDLFile/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="WSDLFile" targetNamespace="http://cews.filenet.intent.com/WSDLFile/">
+	<wsdl:types>
+		<xsd:schema targetNamespace="http://cews.filenet.intent.com/WSDLFile/">
+
+			<xsd:complexType name="Metadata">
+				<xsd:sequence>
+					<xsd:element maxOccurs="1" minOccurs="1" name="Key" nillable="false" type="xsd:string"/>
+					<xsd:element maxOccurs="1" minOccurs="1" name="Value" nillable="false" type="xsd:string"/>
+				</xsd:sequence>
+			</xsd:complexType>
+
+			<xsd:complexType name="Document">
+				<xsd:sequence>
+					<xsd:element maxOccurs="unbounded" minOccurs="0" name="Metadata" type="tns:Metadata"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			
+			<xsd:complexType name="Documents">
+				<xsd:sequence>
+					<xsd:element maxOccurs="unbounded" minOccurs="0" name="Document" type="tns:Document"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			
+
+			<xsd:element name="InsertDocRq">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element maxOccurs="1" minOccurs="1" name="ObjectStore" type="xsd:string"/>
+						<xsd:element maxOccurs="1" minOccurs="1" name="DocClass" type="xsd:string"/>
+						<xsd:element maxOccurs="1" minOccurs="1" name="Path" type="xsd:string"/>
+						<xsd:element maxOccurs="1" minOccurs="1" name="Properties" type="tns:Document"/>
+						<xsd:element maxOccurs="1" minOccurs="1" name="Filenm" type="xsd:string"/>
+						<xsd:element maxOccurs="1" minOccurs="1" name="Content" type="xsd:base64Binary"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+
+			<xsd:element name="InsertDocRs">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element maxOccurs="1" minOccurs="1" name="OperationStatCd" type="xsd:string"/>
+						<xsd:element maxOccurs="1" minOccurs="0" name="ErrStatDesc" type="xsd:string"/>
+						<xsd:element maxOccurs="1" minOccurs="0" name="GUID" type="xsd:string"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+
+			<xsd:element name="SearchDocRq">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element maxOccurs="1" minOccurs="1" name="Radicado" type="xsd:string"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			
+			
+			<xsd:element name="SearchDocRs">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element maxOccurs="1" minOccurs="1" name="OperationStatCd" type="xsd:string"/>
+						<xsd:element maxOccurs="1" minOccurs="0" name="ErrStatDesc" type="xsd:string"/>
+						<xsd:element maxOccurs="1" minOccurs="1" name="Documents" type="tns:Documents"/>
+
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+
+		</xsd:schema>
+	</wsdl:types>
+	<wsdl:message name="insertDocumentResponse">
+		<wsdl:part element="tns:InsertDocRs" name="parameters">
+		</wsdl:part>
+	</wsdl:message>
+
+	<wsdl:message name="insertDocumentRequest">
+		<wsdl:part element="tns:InsertDocRq" name="parameters">
+		</wsdl:part>
+	</wsdl:message>
+
+	<wsdl:message name="searchDocumentResponse">
+		<wsdl:part element="tns:SearchDocRs" name="parameters">
+		</wsdl:part>
+	</wsdl:message>
+
+	<wsdl:message name="searchDocumentRequest">
+		<wsdl:part element="tns:SearchDocRq" name="parameters">
+		</wsdl:part>
+	</wsdl:message>
+
+	<wsdl:portType name="WSDLFile">
+
+
+		<wsdl:operation name="insertDocument">
+			<wsdl:input message="tns:insertDocumentRequest">
+			</wsdl:input>
+			<wsdl:output message="tns:insertDocumentResponse">
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="searchDocument">
+			<wsdl:input message="tns:searchDocumentRequest">
+			</wsdl:input>
+			<wsdl:output message="tns:searchDocumentResponse">
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:portType>
+	<wsdl:binding name="WSDLFileSOAP" type="tns:WSDLFile">
+		<soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+
+		<wsdl:operation name="insertDocument">
+			<soap:operation soapAction="http://cews.filenet.intent.com/WSDLFile/Operation1"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="searchDocument">
+			<soap:operation soapAction="http://cews.filenet.intent.com/WSDLFile/Operation2"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+
+	</wsdl:binding>
+	<wsdl:service name="WSDLFile">
+		<wsdl:port binding="tns:WSDLFileSOAP" name="WSDLFileSOAP">
+			<soap:address location="http://localhost:8080/WSRadicarDocumento/services/WSDLFileSOAP"/>
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>
