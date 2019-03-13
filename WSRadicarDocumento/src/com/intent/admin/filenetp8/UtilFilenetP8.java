@@ -54,12 +54,18 @@ import com.filenet.api.query.RepositoryRow;
 import com.filenet.api.query.SearchSQL;
 import com.filenet.api.query.SearchScope;
 import com.filenet.api.util.UserContext;
+import com.filenet.wcm.api.ObjectFactory;
+import com.filenet.wcm.api.Value;
+import com.filenet.wcm.api.Values;
 import com.intent.admin.filenetp8.p8.SearchUtils;
+import com.intent.filenet.cews.WSDLFile.ContentData;
+
+import filenet.vw.api.VWException;
+import filenet.vw.api.VWSession;
 
 //import mx.com.metlife.filenet.cews.WSDLFile.MetadataStr;
 
-
-public class UtilFilenetP8  {
+public class UtilFilenetP8 {
 	ResourceBundle BUNDLE = ResourceBundle.getBundle("WcmApiConfig");
 
 	private boolean uniquenessConstraint = true;
@@ -124,6 +130,7 @@ public class UtilFilenetP8  {
 	 * urlWorkplace; }
 	 */
 	public UtilFilenetP8(String user, String password, String store) {
+		log.debug("init UtilFilenetP8");
 		this.securitytypeUser.put("USER", new Integer(2000));
 		this.securitytypeUser.put("GROUP", new Integer(2001));
 
@@ -140,7 +147,7 @@ public class UtilFilenetP8  {
 
 		this.securityType.put("ALLOW", new Integer(1));
 		this.securityType.put("DENY", new Integer(2));
-
+		log.debug("prev connect");
 		Conect(user, password);
 		this.store = store;
 	}
@@ -176,8 +183,10 @@ public class UtilFilenetP8  {
 	private Vector osnames;
 	private boolean isConnected;
 	private UserContext uc;
-
+	VWSession session = null;
+	
 	private void Conect(String puser, String ppassword) {
+		log.debug("init connect");
 		this.user = puser;
 		this.password = ppassword;
 		con = Factory.Connection.getConnection(BUNDLE.getString("url"));
@@ -189,6 +198,14 @@ public class UtilFilenetP8  {
 		ost = dom.get_ObjectStores();
 		isConnected = true;
 		System.out.println("Connected!!");
+		
+		log.debug("prev vwsession");
+		try {
+			session = new VWSession(puser,ppassword,BUNDLE.getString("region"));
+		} catch (VWException e) {
+			e.printStackTrace();
+		}
+		log.debug("done vwsession");
 
 	}
 
@@ -856,39 +873,51 @@ public class UtilFilenetP8  {
 		return rcr;
 	}
 
-	public Document createDocumentAndContent(String folderParent, String className, String[] columns, Object[] values,
-			String urlContent) throws Exception {
+	public Document createDocumentAndContent(String folderParent, String className, String[] columns, Object[] values, ContentData[] contentDatas) throws Exception {
 
 		Document doc = null;
 		if (className.equals(""))
 			doc = Factory.Document.createInstance(fetchOS(), null);
 		else
 			doc = Factory.Document.createInstance(fetchOS(), className);
-		File file = new File(urlContent);
-		
-		String[] tokens = file.getName().split("[\\\\|/]");
-		String filename = tokens[tokens.length - 1];
-		
-		doc.getProperties().putValue("DocumentTitle", filename);
-		doc.set_MimeType(SearchUtils.getMimeType(urlContent));
 
 		ContentElementList cel = null;
-		ContentTransfer contentTransfer = createContentTransfer(file);
-		if (contentTransfer != null) {
-			cel = Factory.ContentElement.createList();
-			cel.add(contentTransfer);
+		cel = Factory.ContentElement.createList();
+		for (int i = 0; i < contentDatas.length; i++) {
+			ContentData contentData = contentDatas[i];
+			String fName = (contentData.getFilenm());
+			String tmpdir = System.getProperty("java.io.tmpdir");
+			fName = tmpdir + java.io.File.separator + fName;
+			File file = new File(fName);
+
+			String[] tokens = file.getName().split("[\\\\|/]");
+			String filename = tokens[tokens.length - 1];
+			if(i==0) {
+				doc.getProperties().putValue("DocumentTitle", filename);
+				doc.set_MimeType(SearchUtils.getMimeType(fName));
+			}
+			ContentTransfer contentTransfer = createContentTransfer(file);
+			log.debug("Check content transfer:"+contentData.getFilenm()+":"+contentTransfer);
+			log.debug("CEL-prev:"+cel.size());
+			
+			if (contentTransfer != null) {
+				cel.add(contentTransfer);
+			}
+			log.debug("CEL-post:"+cel.size());
+			
+		}
+		
+		if (cel != null) {
+			doc.set_ContentElements(cel);
 		}
 
-		if (cel != null)
-			doc.set_ContentElements(cel);
-		
-		setP8Properties(className,doc, columns, values);
-		
+		setP8Properties(className, doc, columns, values);
+
 		doc.save(RefreshMode.REFRESH);
 		doc.checkin(AutoClassify.AUTO_CLASSIFY, CheckinType.MAJOR_VERSION);
 		doc.save(RefreshMode.REFRESH);
 		ReferentialContainmentRelationship rcr = fileObject(fetchOS(), doc, folderParent);
-		
+
 		rcr.save(RefreshMode.REFRESH);
 
 		return doc;
@@ -900,29 +929,37 @@ public class UtilFilenetP8  {
 		return transfer;
 	}
 
-	private void setP8Properties(String className,Document doc, String[] properties, Object[] values) throws Exception {
+	private void setP8Properties(String className, Document doc, String[] properties, Object[] values)
+			throws Exception {
 
 		PropertyFilter pf = new PropertyFilter();
 		pf.addIncludeType(0, null, null, FilteredPropertyType.ANY, 1);
-		//doc = Factory.Document.fetchInstance(fetchOS(), doc.getProperties().getIdValue("Id"), pf);
+		// doc = Factory.Document.fetchInstance(fetchOS(),
+		// doc.getProperties().getIdValue("Id"), pf);
 
 		// Fetch selected class description from the server
-		
-		PropertyDescriptionList objPropDescs = Factory.ClassDescription.fetchInstance(fetchOS(), className,null).get_PropertyDescriptions();
+
+		PropertyDescriptionList objPropDescs = Factory.ClassDescription.fetchInstance(fetchOS(), className, null)
+				.get_PropertyDescriptions();
 		for (int i = 0; i < properties.length; i++) {
+			System.out.println("check... " + properties[i]);
 			Iterator iter = objPropDescs.iterator();
 			PropertyDescription objPropDesc = null;
 			while (iter.hasNext()) {
 				objPropDesc = (PropertyDescription) iter.next();
 				if (objPropDesc.get_SymbolicName().equalsIgnoreCase(properties[i])) {
+					System.out.println("found.." + properties[i]);
+					System.out.println("Card.." + objPropDesc.get_Cardinality());
 					if (objPropDesc.get_Cardinality().equals(Cardinality.LIST)) {
-						// Object[] obs = ((String) values[i]).split(this.multivalueSplit);
-						// Values vs = ObjectFactory.getValues();
-						// for (int j = 0; j < obs.length; j++) {
-						// Value v = ObjectFactory.getValue();
-						// setValueValueP8(v, obs[j]);
-						// vs.add(v);
-						// }
+						Object[] obs = ((String) values[i]).split(this.multivalueSplit);
+						Values vs = ObjectFactory.getValues();
+						for (int j = 0; j < obs.length; j++) {
+							Value v = ObjectFactory.getValue();
+							setValueValueP8(v, obs[j]);
+							vs.add(v);
+							
+						}
+						setValuePropertyP8(doc, objPropDesc, vs);
 					} else if (objPropDesc.get_Cardinality().equals(Cardinality.SINGLE)) {
 						setValuePropertyP8(doc, objPropDesc, values[i]);
 					}
@@ -973,19 +1010,32 @@ public class UtilFilenetP8  {
 						+ " Value: " + o);
 			}
 		} else if (o.getClass().getName().equals("com.filenet.wcm.api.impl.ValuesImpl")) {
-			// obj.getProperties().putObjectValue(pdesc.get_SymbolicName(),(Values) o);
+			obj.getProperties().putObjectValue(pdesc.get_SymbolicName(), (Values) o);
 		}
 
 		log.debug("Saved prop..." + pdesc.get_SymbolicName() + " " + o);
-		//obj.save(RefreshMode.REFRESH);
+		// obj.save(RefreshMode.REFRESH);
 	}
 
-	
-
 	public Iterator<Document> getDocumentsInFolder(String folder) {
-		Folder f=Factory.Folder.fetchInstance(fetchOS(), folder, null);
-		DocumentSet set=f.get_ContainedDocuments();
+		Folder f = Factory.Folder.fetchInstance(fetchOS(), folder, null);
+		DocumentSet set = f.get_ContainedDocuments();
 		return set.iterator();
 	}
 
+	private void setValueValueP8(Value p, Object o) {
+		if (o.getClass().getName().equals(class_String)) {
+			p.setValue((String) o);
+		} else if (o.getClass().getName().equals(class_Integer)) {
+			p.setValue(Integer.parseInt(o.toString()));
+		} else if (o.getClass().getName().equals(class_Date)) {
+			p.setValue((Date) o);
+		} else if (o.getClass().getName().equals(class_Boolean)) {
+			p.setValue(Boolean.getBoolean(o.toString()));
+		}
+	}
+
+	public VWSession getVWSession() {
+		return session;
+	}
 }

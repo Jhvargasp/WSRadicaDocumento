@@ -14,6 +14,7 @@ import com.filenet.wcm.api.ReadOnlyObjectException;
 import com.filenet.wcm.api.RemoteServerException;
 import com.filenet.wcm.api.TransportInputStream;
 import com.filenet.wcm.api.UniquenessConstraintException;
+import com.intent.admin.filenetp8.PEUtils;
 import com.intent.admin.filenetp8.UtilFilenetP8;
 
 import java.io.ByteArrayOutputStream;
@@ -30,7 +31,6 @@ import java.util.List;
 import java.util.ResourceBundle;
 import java.util.Set;
 
-
 import org.apache.commons.codec.binary.Base64;
 import org.apache.log4j.Logger;
 import com.minas.filenet.cews.service.*;
@@ -41,6 +41,7 @@ public class Util {
 	private static final ResourceBundle BUNDLE = ResourceBundle.getBundle("WcmApiConfig");
 	private final Logger log = Logger.getLogger(getClass());
 	private String validation_msg = "";
+
 	public final SearchDocRs executeSearch(SearchDocRq paramSearchDocRq) {
 		this.log.debug("Start query");
 		SearchDocRs localSearchDocRs = new SearchDocRs();
@@ -54,7 +55,7 @@ public class Util {
 			}
 			this.log.debug("Validate Password");
 			String localObject1 = BUNDLE.getString("PASSWORDCONTENT");
-			
+
 			if (!validateParameter((String) localObject1)) {
 				localSearchDocRs.setOperationStatCd("010");
 				localSearchDocRs.setErrStatDesc("PARAMETER_ERROR_CE Parameter Password can't be empty ");
@@ -68,16 +69,16 @@ public class Util {
 				return localSearchDocRs;
 			}
 			this.log.debug("Validate DocClass");
-			String str3 ="ComunicacionEntrante";
+			String str3 = "ComunicacionEntrante";
 			if (!validateParameter(str3)) {
 				localSearchDocRs.setOperationStatCd("010");
 				localSearchDocRs.setErrStatDesc("PARAMETER_ERROR_CE Parameter DocClass can't be empty ");
 				return localSearchDocRs;
 			}
 			String str4 = "";
-			
+
 			this.log.debug("Validate QueryCondition");
-			String str5 = ("Radicado ='"+paramSearchDocRq.getRadicado()+"'");
+			String str5 = ("Radicado ='" + paramSearchDocRq.getRadicado() + "'");
 			if (!validateParameter(str5)) {
 				localSearchDocRs.setOperationStatCd("010");
 				localSearchDocRs.setErrStatDesc("PARAMETER_ERROR_CE Parameter QueryCondition can't be empty ");
@@ -107,15 +108,17 @@ public class Util {
 			this.log.debug("Results : ".concat(String.valueOf(localList2.size())));
 			String[] arrayOfString = fixParams(localHashMap1).split(",");
 			List<Metadata> arrayOfMetadata = new ArrayList<Metadata>();
-			
-			//mx.com.metlife.filenet.cews.WSDLFile.Document[] arrayOfMetadata = new mx.com.metlife.filenet.cews.WSDLFile.Document[localList2.size()];
+
+			// mx.com.metlife.filenet.cews.WSDLFile.Document[] arrayOfMetadata = new
+			// mx.com.metlife.filenet.cews.WSDLFile.Document[localList2.size()];
 			int i = localList2.size();
-			Metadata[][] arrayOfDocuments=new Metadata[i][];
+			Metadata[][] arrayOfDocuments = new Metadata[i][];
 			for (int j = 0; j < i; j++) {
 				HashMap localHashMap2 = (HashMap) localList2.get(j);
 				Metadata[] arrayOfMetadata1 = new Metadata[arrayOfString.length];
-				//mx.com.metlife.filenet.cews.wsdlfile.Document document=new mx.com.metlife.filenet.cews.wsdlfile.Document();
-				
+				// mx.com.metlife.filenet.cews.wsdlfile.Document document=new
+				// mx.com.metlife.filenet.cews.wsdlfile.Document();
+
 				for (int k = 0; k < arrayOfString.length; k++) {
 					Metadata localMetadata = new Metadata();
 					Object localObject2 = localHashMap2.get(arrayOfString[k]);
@@ -136,12 +139,12 @@ public class Util {
 						localMetadata.setValue("".toString());
 					}
 					arrayOfMetadata1[k] = localMetadata;
-					//document.getMetadata().add(localMetadata);
+					// document.getMetadata().add(localMetadata);
 				}
-				
-				arrayOfDocuments[j]= arrayOfMetadata1;
-				//arrayOfMetadata[j]=new mx.com.metlife.filenet.cews.WSDLFile.Document();
-				//arrayOfMetadata[j].setDocuments( arrayOfMetadata1);
+
+				arrayOfDocuments[j] = arrayOfMetadata1;
+				// arrayOfMetadata[j]=new mx.com.metlife.filenet.cews.WSDLFile.Document();
+				// arrayOfMetadata[j].setDocuments( arrayOfMetadata1);
 			}
 			localSearchDocRs.setDocuments(arrayOfDocuments);
 			localSearchDocRs.setErrStatDesc("");
@@ -154,11 +157,10 @@ public class Util {
 			Object localObject1 = evaluateException(localException1);
 			localSearchDocRs.setOperationStatCd(((ResponseError) localObject1).getErrCd());
 			localSearchDocRs.setErrStatDesc(((ResponseError) localObject1).getErrStat());
-			//localSearchDocRs.setDocuments(new Metadata[0][]);
+			// localSearchDocRs.setDocuments(new Metadata[0][]);
 		}
 		return localSearchDocRs;
 	}
-
 
 	private String fixParams(HashMap paramHashMap) {
 		String str1 = "";
@@ -235,7 +237,7 @@ public class Util {
 			}
 			this.log.debug("Validate Content");
 			this.log.debug("Validate Filenm");
-			String fName = (paramInsertDocRq.getFilenm());
+			String fName = (paramInsertDocRq.getContents()[0].getFilenm());
 			String tmpdir = System.getProperty("java.io.tmpdir");
 			fName = tmpdir + java.io.File.separator + fName;
 			if (!validateParameter(fName)) {
@@ -244,25 +246,28 @@ public class Util {
 				return localInsertDocRs;
 			}
 			this.log.debug("Validate Properties");
+			log.debug(paramInsertDocRq.getProperties());
 			if ((paramInsertDocRq.getProperties() == null) || (paramInsertDocRq.getProperties().length == 0)) {
 				localInsertDocRs.setOperationStatCd("010");
 				localInsertDocRs.setErrStatDesc("PARAMETER_ERROR_CE Parameter Properties can't be null or empty ");
 				return localInsertDocRs;
 			}
-			Base64 localBase64 = new Base64();
+			// Base64 localBase64 = new Base64();
+			log.debug("Creating Utilfilenet");
+
 			UtilFilenetP8 localObject1 = new UtilFilenetP8(localResourceBundle.getString("USERCONTENT"),
 					// this.blowfish.(localResourceBundle.getString("PASSWORDCONTENT")),
-					((localResourceBundle.getString("PASSWORDCONTENT"))),
-					(paramInsertDocRq.getObjectStore()));
+					((localResourceBundle.getString("PASSWORDCONTENT"))), (paramInsertDocRq.getObjectStore()));
+			log.debug("Done Utilfilenet");
 			UtilFilenetP8.setFormatDate(BUNDLE.getString("DATEFORMAT"));
 			UtilFilenetP8.setPatternDate(BUNDLE.getString("DATEPATTERN"));
 			UtilFilenetP8.setTimeZone(BUNDLE.getString("TIMEZONE"));
 			localObject1.setMultivalueSplit(BUNDLE.getString("SPLITCHARACTER"));
-			byte[] arrayOfByte = paramInsertDocRq.getContent();
-			if (writeFile(arrayOfByte, fName)) {
-				this.log.debug("Temp Document created: " + fName);
+			
+			if (writeFile(paramInsertDocRq.getContents())) {
 				ArrayList localArrayList1 = new ArrayList();
 				ArrayList localArrayList2 = new ArrayList();
+				String paramRad = null;
 				int i = 0;
 				for (int j = 0; j < paramInsertDocRq.getProperties().length; j++) {
 					Metadata localObject2 = paramInsertDocRq.getProperties()[j];
@@ -285,6 +290,9 @@ public class Util {
 						if (((String) localObject3).equals("DocumentTitle")) {
 							i = 1;
 						}
+						if (localObject3.equals("Radicado")) {
+							paramRad = str2;
+						}
 					} else {
 						localInsertDocRs.setOperationStatCd("010");
 						if ((localObject3 != null) && (((String) localObject3).equals("DocumentTitle"))) {
@@ -297,35 +305,77 @@ public class Util {
 						return localInsertDocRs;
 					}
 				}
-				
-				localArrayList1.add("Radicado");
-				localArrayList2.add(createRadicado());
-				/*if (i == 0) {
-					localArrayList1.add("DocumentTitle");
-					localArrayList2.add(fName);
-				}*/
-					localObject1.setUniquenessConstraint(false);
-				
+
+				String rad =paramRad;
+				if (paramRad != null && paramRad.length() == 0) {
+					localInsertDocRs.setErrStatDesc("PARAMETER_ERROR_CE Parameter Radicado is invalid");
+					localInsertDocRs.setOperationStatCd("010");
+					return localInsertDocRs;
+				}else if(paramRad != null && paramRad.length()>0) {
+					rad =paramRad;
+				}
+				else {
+					localArrayList1.add("Radicado");
+					rad = createRadicado();
+					localArrayList2.add(rad);
+				}
+				/*
+				 * if (i == 0) { localArrayList1.add("DocumentTitle");
+				 * localArrayList2.add(fName); }
+				 */
+				localObject1.setUniquenessConstraint(false);
+
 				com.filenet.api.core.Document localObject2 = localObject1.createDocumentAndContent(
 						(paramInsertDocRq.getPath()), docClass,
 						(String[]) localArrayList1.toArray(new String[localArrayList1.size()]),
-						localArrayList2.toArray(), fName);
+						localArrayList2.toArray(), paramInsertDocRq.getContents());
+
+				// launch pe instance
+				for (int j = 0; j < paramInsertDocRq.getContents().length; j++) {
+					ContentData contentData = paramInsertDocRq.getContents()[j];
+					
+					fName = (contentData.getFilenm());
+					tmpdir = System.getProperty("java.io.tmpdir");
+					fName = tmpdir + java.io.File.separator + fName;
+					
+					this.log.debug("Document on CE created: " + fName);
+					new java.io.File(fName).delete();
+					this.log.debug("Temp Document deleted: " + fName);
+					
+				}
 				
-				this.log.debug("Document on CE created: " + fName);
-				new java.io.File(fName).delete();
-				this.log.debug("Temp Document deleted: " + fName);
 				Id idValue = localObject2.getProperties().getIdValue("Id");
-				this.log.debug("ID Document created: " + idValue);				
-				//localInsertDocRs.setGUID(localBase64.encode(localObject2.getProperties().getIdValue("Id").toString().getBytes()));
-				localInsertDocRs.setGUID((idValue.toString()));
+				this.log.debug("ID Document created: " + idValue);
+				// localInsertDocRs.setGUID(localBase64.encode(localObject2.getProperties().getIdValue("Id").toString().getBytes()));
+				localInsertDocRs.setGUID((rad));
 				localInsertDocRs.setOperationStatCd("000");
+
+				new PEUtils().launchProcess(localObject2, localObject1.getVWSession());
+
 			}
 		} catch (Exception localException1) {
+			localException1.printStackTrace();
 			Object localObject1 = evaluateException(localException1);
 			localInsertDocRs.setOperationStatCd(((ResponseError) localObject1).getErrCd());
 			localInsertDocRs.setErrStatDesc(((ResponseError) localObject1).getErrStat());
 		}
 		return localInsertDocRs;
+	}
+
+	private boolean writeFile(ContentData[] contents) throws Exception {
+		for (int i = 0; i < contents.length; i++) {
+			ContentData contentData = contents[i];
+			String fName = (contentData.getFilenm());
+			String tmpdir = System.getProperty("java.io.tmpdir");
+			fName = tmpdir + java.io.File.separator + fName;
+			if(!writeFile(contentData.getContent(), fName)) {
+				log.debug("Error generating content: "+fName);
+				return false;
+			}else {
+				log.debug("Generated content: "+fName);
+			}
+		}
+		return true;
 	}
 
 	private String getLevel(String paramString) {
@@ -342,11 +392,11 @@ public class Util {
 		return str;
 	}
 
-	private String createRadicado(){
+	private String createRadicado() {
 		String template = "";
 		String autoNum = "";
 
-		String tipoDoc="OFICIO";
+		String tipoDoc = "OFICIO";
 		if (tipoDoc.equalsIgnoreCase("OFICIO") || tipoDoc.equalsIgnoreCase("MEMORANDO")) {
 			template = "TEMPLATE1";
 			autoNum = "correspondencia";
@@ -362,13 +412,14 @@ public class Util {
 		String ticket = "NA";
 		try {
 			ticket = new LabelGenerator().GenerateLabel(template, params, autoNum);
-		}catch (Exception e) {
+		} catch (Exception e) {
+			e.printStackTrace();
 			// TODO: handle exception
 		}
 		return ticket;
 
 	}
-	
+
 	private String parseCharacters(String paramString) {
 		paramString = paramString.replaceAll("\\&", "&amp;");
 		paramString = paramString.replaceAll("<", "&lt;");
@@ -387,7 +438,6 @@ public class Util {
 		return true;
 	}
 
-	
 	private boolean validateParameter(String paramString) {
 		return (paramString != null) && (paramString.length() > 0);
 	}
@@ -449,63 +499,34 @@ public class Util {
 		}
 		return localResponseError;
 	}
-/*
-	private boolean getDocumentExists(String paramString1, String paramString2, MetaDataList paramMetaDataList,
-			UtilFilenetP8 paramUtilFilenetP8) throws Exception {
-		this.log.debug("Initializing properties validations...");
-		if (paramMetaDataList.isAnyRequred()) {
-			boolean bool = false;
-			Iterator<com.filenet.api.core.Document> it = paramUtilFilenetP8.getDocumentsInFolder(paramString1);
-			int i = 0;
-			while (it.hasNext()) {
-				this.log.debug("Checking document #" + i);
-				i++;
-				com.filenet.api.core.Document localDocument = (com.filenet.api.core.Document) it.next();
-				localDocument.refresh();
-				localDocument.get_Id();
-				this.log.debug("Checking required properties for document #" + i);
-				for (int j = 0; j < paramMetaDataList.size(); j++) {
-					MetaData localMetaData = (MetaData) paramMetaDataList.get(j);
-					if (localMetaData.isRequired()) {
-						try {
-							if (localMetaData.getValue().indexOf(';') > -1) {
-								String[] values = localMetaData.getValue().split(";");
-								for (int k = 0; k < values.length; k++) {
-									String string = values[k];
-									if (localDocument.getProperties().getStringListValue(localMetaData.getKey())
-											.contains(string)) {
-										bool = true;
-										this.validation_msg = (this.validation_msg + " [" + localMetaData.getKey()
-												+ "]");
-									} else {
-										bool = false;
-										this.validation_msg = "";
-										break;
-									}
-								}
-							} else if (localMetaData.getValue().toString().equals(
-									localDocument.getProperties().getStringValue(localMetaData.getKey()).toString())) {
-								bool = true;
-								this.validation_msg = (this.validation_msg + " [" + localMetaData.getKey() + "]");
-							} else {
-								bool = false;
-								this.validation_msg = "";
-								break;
-							}
-						} catch (Exception localException) {
-							bool = false;
-							this.validation_msg = "";
-							break;
-						}
-					}
-				}
-				if (bool) {
-					return bool;
-				}
-			}
-		}
-		this.log.debug("No need to check for properties because all input properties are Required=False");
-		return false;
-	}
-	*/
+	/*
+	 * private boolean getDocumentExists(String paramString1, String paramString2,
+	 * MetaDataList paramMetaDataList, UtilFilenetP8 paramUtilFilenetP8) throws
+	 * Exception { this.log.debug("Initializing properties validations..."); if
+	 * (paramMetaDataList.isAnyRequred()) { boolean bool = false;
+	 * Iterator<com.filenet.api.core.Document> it =
+	 * paramUtilFilenetP8.getDocumentsInFolder(paramString1); int i = 0; while
+	 * (it.hasNext()) { this.log.debug("Checking document #" + i); i++;
+	 * com.filenet.api.core.Document localDocument = (com.filenet.api.core.Document)
+	 * it.next(); localDocument.refresh(); localDocument.get_Id();
+	 * this.log.debug("Checking required properties for document #" + i); for (int j
+	 * = 0; j < paramMetaDataList.size(); j++) { MetaData localMetaData = (MetaData)
+	 * paramMetaDataList.get(j); if (localMetaData.isRequired()) { try { if
+	 * (localMetaData.getValue().indexOf(';') > -1) { String[] values =
+	 * localMetaData.getValue().split(";"); for (int k = 0; k < values.length; k++)
+	 * { String string = values[k]; if
+	 * (localDocument.getProperties().getStringListValue(localMetaData.getKey())
+	 * .contains(string)) { bool = true; this.validation_msg = (this.validation_msg
+	 * + " [" + localMetaData.getKey() + "]"); } else { bool = false;
+	 * this.validation_msg = ""; break; } } } else if
+	 * (localMetaData.getValue().toString().equals(
+	 * localDocument.getProperties().getStringValue(localMetaData.getKey()).toString
+	 * ())) { bool = true; this.validation_msg = (this.validation_msg + " [" +
+	 * localMetaData.getKey() + "]"); } else { bool = false; this.validation_msg =
+	 * ""; break; } } catch (Exception localException) { bool = false;
+	 * this.validation_msg = ""; break; } } } if (bool) { return bool; } } }
+	 * this.log.
+	 * debug("No need to check for properties because all input properties are Required=False"
+	 * ); return false; }
+	 */
 }

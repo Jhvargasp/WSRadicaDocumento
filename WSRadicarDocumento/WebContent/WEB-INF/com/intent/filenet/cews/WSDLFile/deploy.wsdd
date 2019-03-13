@@ -22,27 +22,11 @@
       <parameter name="typeMappingVersion" value="1.2"/>
       <parameter name="allowedMethods" value="*"/>
 
-      <typeMapping
-        xmlns:ns="http://cews.filenet.intent.com/WSDLFile/"
-        qname="ns:>SearchDocRq"
-        type="java:com.intent.filenet.cews.WSDLFile.SearchDocRq"
-        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
-        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
-        encodingStyle=""
-      />
       <arrayMapping
         xmlns:ns="http://cews.filenet.intent.com/WSDLFile/"
         qname="ns:Document"
         type="java:com.intent.filenet.cews.WSDLFile.Metadata[]"
         innerType="cmp-ns:Metadata" xmlns:cmp-ns="http://cews.filenet.intent.com/WSDLFile/"
-        encodingStyle=""
-      />
-      <typeMapping
-        xmlns:ns="http://cews.filenet.intent.com/WSDLFile/"
-        qname="ns:>SearchDocRs"
-        type="java:com.intent.filenet.cews.WSDLFile.SearchDocRs"
-        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
-        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
         encodingStyle=""
       />
       <typeMapping
@@ -69,11 +53,42 @@
         deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
         encodingStyle=""
       />
+      <typeMapping
+        xmlns:ns="http://cews.filenet.intent.com/WSDLFile/"
+        qname="ns:>SearchDocRq"
+        type="java:com.intent.filenet.cews.WSDLFile.SearchDocRq"
+        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
+        encodingStyle=""
+      />
+      <typeMapping
+        xmlns:ns="http://cews.filenet.intent.com/WSDLFile/"
+        qname="ns:>SearchDocRs"
+        type="java:com.intent.filenet.cews.WSDLFile.SearchDocRs"
+        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
+        encodingStyle=""
+      />
       <arrayMapping
         xmlns:ns="http://cews.filenet.intent.com/WSDLFile/"
         qname="ns:Documents"
         type="java:com.intent.filenet.cews.WSDLFile.Metadata[][]"
         innerType="cmp-ns:Document" xmlns:cmp-ns="http://cews.filenet.intent.com/WSDLFile/"
+        encodingStyle=""
+      />
+      <arrayMapping
+        xmlns:ns="http://cews.filenet.intent.com/WSDLFile/"
+        qname="ns:FileContent"
+        type="java:com.intent.filenet.cews.WSDLFile.ContentData[]"
+        innerType="cmp-ns:ContentData" xmlns:cmp-ns="http://cews.filenet.intent.com/WSDLFile/"
+        encodingStyle=""
+      />
+      <typeMapping
+        xmlns:ns="http://cews.filenet.intent.com/WSDLFile/"
+        qname="ns:ContentData"
+        type="java:com.intent.filenet.cews.WSDLFile.ContentData"
+        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
         encodingStyle=""
       />
   </service>

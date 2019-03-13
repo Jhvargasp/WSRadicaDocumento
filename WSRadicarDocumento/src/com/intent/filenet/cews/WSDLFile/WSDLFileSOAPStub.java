@@ -104,6 +104,13 @@ public class WSDLFileSOAPStub extends org.apache.axis.client.Stub implements com
             cachedSerFactories.add(beansf);
             cachedDeserFactories.add(beandf);
 
+            qName = new javax.xml.namespace.QName("http://cews.filenet.intent.com/WSDLFile/", "ContentData");
+            cachedSerQNames.add(qName);
+            cls = com.intent.filenet.cews.WSDLFile.ContentData.class;
+            cachedSerClasses.add(cls);
+            cachedSerFactories.add(beansf);
+            cachedDeserFactories.add(beandf);
+
             qName = new javax.xml.namespace.QName("http://cews.filenet.intent.com/WSDLFile/", "Document");
             cachedSerQNames.add(qName);
             cls = com.intent.filenet.cews.WSDLFile.Metadata[].class;
@@ -119,6 +126,15 @@ public class WSDLFileSOAPStub extends org.apache.axis.client.Stub implements com
             cachedSerClasses.add(cls);
             qName = new javax.xml.namespace.QName("http://cews.filenet.intent.com/WSDLFile/", "Document");
             qName2 = new javax.xml.namespace.QName("", "Document");
+            cachedSerFactories.add(new org.apache.axis.encoding.ser.ArraySerializerFactory(qName, qName2));
+            cachedDeserFactories.add(new org.apache.axis.encoding.ser.ArrayDeserializerFactory());
+
+            qName = new javax.xml.namespace.QName("http://cews.filenet.intent.com/WSDLFile/", "FileContent");
+            cachedSerQNames.add(qName);
+            cls = com.intent.filenet.cews.WSDLFile.ContentData[].class;
+            cachedSerClasses.add(cls);
+            qName = new javax.xml.namespace.QName("http://cews.filenet.intent.com/WSDLFile/", "ContentData");
+            qName2 = new javax.xml.namespace.QName("", "Data");
             cachedSerFactories.add(new org.apache.axis.encoding.ser.ArraySerializerFactory(qName, qName2));
             cachedDeserFactories.add(new org.apache.axis.encoding.ser.ArrayDeserializerFactory());
 

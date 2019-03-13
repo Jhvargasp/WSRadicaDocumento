@@ -16,9 +16,7 @@ public class InsertDocRq  implements java.io.Serializable {
 
     private com.intent.filenet.cews.WSDLFile.Metadata[] properties;
 
-    private java.lang.String filenm;
-
-    private byte[] content;
+    private com.intent.filenet.cews.WSDLFile.ContentData[] contents;
 
     public InsertDocRq() {
     }
@@ -28,14 +26,12 @@ public class InsertDocRq  implements java.io.Serializable {
            java.lang.String docClass,
            java.lang.String path,
            com.intent.filenet.cews.WSDLFile.Metadata[] properties,
-           java.lang.String filenm,
-           byte[] content) {
+           com.intent.filenet.cews.WSDLFile.ContentData[] contents) {
            this.objectStore = objectStore;
            this.docClass = docClass;
            this.path = path;
            this.properties = properties;
-           this.filenm = filenm;
-           this.content = content;
+           this.contents = contents;
     }
 
 
@@ -120,42 +116,22 @@ public class InsertDocRq  implements java.io.Serializable {
 
 
     /**
-     * Gets the filenm value for this InsertDocRq.
+     * Gets the contents value for this InsertDocRq.
      * 
-     * @return filenm
+     * @return contents
      */
-    public java.lang.String getFilenm() {
-        return filenm;
+    public com.intent.filenet.cews.WSDLFile.ContentData[] getContents() {
+        return contents;
     }
 
 
     /**
-     * Sets the filenm value for this InsertDocRq.
+     * Sets the contents value for this InsertDocRq.
      * 
-     * @param filenm
+     * @param contents
      */
-    public void setFilenm(java.lang.String filenm) {
-        this.filenm = filenm;
-    }
-
-
-    /**
-     * Gets the content value for this InsertDocRq.
-     * 
-     * @return content
-     */
-    public byte[] getContent() {
-        return content;
-    }
-
-
-    /**
-     * Sets the content value for this InsertDocRq.
-     * 
-     * @param content
-     */
-    public void setContent(byte[] content) {
-        this.content = content;
+    public void setContents(com.intent.filenet.cews.WSDLFile.ContentData[] contents) {
+        this.contents = contents;
     }
 
     private java.lang.Object __equalsCalc = null;
@@ -182,12 +158,9 @@ public class InsertDocRq  implements java.io.Serializable {
             ((this.properties==null && other.getProperties()==null) || 
              (this.properties!=null &&
               java.util.Arrays.equals(this.properties, other.getProperties()))) &&
-            ((this.filenm==null && other.getFilenm()==null) || 
-             (this.filenm!=null &&
-              this.filenm.equals(other.getFilenm()))) &&
-            ((this.content==null && other.getContent()==null) || 
-             (this.content!=null &&
-              java.util.Arrays.equals(this.content, other.getContent())));
+            ((this.contents==null && other.getContents()==null) || 
+             (this.contents!=null &&
+              java.util.Arrays.equals(this.contents, other.getContents())));
         __equalsCalc = null;
         return _equals;
     }
@@ -219,14 +192,11 @@ public class InsertDocRq  implements java.io.Serializable {
                 }
             }
         }
-        if (getFilenm() != null) {
-            _hashCode += getFilenm().hashCode();
-        }
-        if (getContent() != null) {
+        if (getContents() != null) {
             for (int i=0;
-                 i<java.lang.reflect.Array.getLength(getContent());
+                 i<java.lang.reflect.Array.getLength(getContents());
                  i++) {
-                java.lang.Object obj = java.lang.reflect.Array.get(getContent(), i);
+                java.lang.Object obj = java.lang.reflect.Array.get(getContents(), i);
                 if (obj != null &&
                     !obj.getClass().isArray()) {
                     _hashCode += obj.hashCode();
@@ -269,16 +239,11 @@ public class InsertDocRq  implements java.io.Serializable {
         elemField.setItemQName(new javax.xml.namespace.QName("", "Metadata"));
         typeDesc.addFieldDesc(elemField);
         elemField = new org.apache.axis.description.ElementDesc();
-        elemField.setFieldName("filenm");
-        elemField.setXmlName(new javax.xml.namespace.QName("", "Filenm"));
-        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
+        elemField.setFieldName("contents");
+        elemField.setXmlName(new javax.xml.namespace.QName("", "Contents"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://cews.filenet.intent.com/WSDLFile/", "ContentData"));
         elemField.setNillable(false);
-        typeDesc.addFieldDesc(elemField);
-        elemField = new org.apache.axis.description.ElementDesc();
-        elemField.setFieldName("content");
-        elemField.setXmlName(new javax.xml.namespace.QName("", "Content"));
-        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "base64Binary"));
-        elemField.setNillable(false);
+        elemField.setItemQName(new javax.xml.namespace.QName("", "Data"));
         typeDesc.addFieldDesc(elemField);
     }
 
