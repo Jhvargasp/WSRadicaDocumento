@@ -263,7 +263,7 @@ public class Util {
 			UtilFilenetP8.setPatternDate(BUNDLE.getString("DATEPATTERN"));
 			UtilFilenetP8.setTimeZone(BUNDLE.getString("TIMEZONE"));
 			localObject1.setMultivalueSplit(BUNDLE.getString("SPLITCHARACTER"));
-			
+
 			if (writeFile(paramInsertDocRq.getContents())) {
 				ArrayList localArrayList1 = new ArrayList();
 				ArrayList localArrayList2 = new ArrayList();
@@ -306,15 +306,14 @@ public class Util {
 					}
 				}
 
-				String rad =paramRad;
+				String rad = paramRad;
 				if (paramRad != null && paramRad.length() == 0) {
 					localInsertDocRs.setErrStatDesc("PARAMETER_ERROR_CE Parameter Radicado is invalid");
 					localInsertDocRs.setOperationStatCd("010");
 					return localInsertDocRs;
-				}else if(paramRad != null && paramRad.length()>0) {
-					rad =paramRad;
-				}
-				else {
+				} else if (paramRad != null && paramRad.length() > 0) {
+					rad = paramRad;
+				} else {
 					localArrayList1.add("Radicado");
 					rad = createRadicado();
 					localArrayList2.add(rad);
@@ -333,17 +332,35 @@ public class Util {
 				// launch pe instance
 				for (int j = 0; j < paramInsertDocRq.getContents().length; j++) {
 					ContentData contentData = paramInsertDocRq.getContents()[j];
-					
+
 					fName = (contentData.getFilenm());
 					tmpdir = System.getProperty("java.io.tmpdir");
 					fName = tmpdir + java.io.File.separator + fName;
-					
+
 					this.log.debug("Document on CE created: " + fName);
 					new java.io.File(fName).delete();
 					this.log.debug("Temp Document deleted: " + fName);
-					
+
 				}
-				
+
+				// validate and create anexos
+				if (paramInsertDocRq.getAttachments().length > 0
+						&& paramInsertDocRq.getAttachments()[0].getFilenm() != null
+						&& paramInsertDocRq.getAttachments()[0].getFilenm().length() > 0) {
+					writeFile(paramInsertDocRq.getAttachments());
+					localArrayList1.add("DocumentTitle");
+					localArrayList2.add("Anexo de la comunicación "+rad);
+					
+					localArrayList1.add("TipoDocumental");
+					localArrayList2.add("ANEXOS");
+					
+					
+					com.filenet.api.core.Document localObject3 = localObject1.createDocumentAndContent(
+							(paramInsertDocRq.getPath()), "Anexos",
+							(String[]) localArrayList1.toArray(new String[localArrayList1.size()]),
+							localArrayList2.toArray(), paramInsertDocRq.getAttachments());
+				}
+
 				Id idValue = localObject2.getProperties().getIdValue("Id");
 				this.log.debug("ID Document created: " + idValue);
 				// localInsertDocRs.setGUID(localBase64.encode(localObject2.getProperties().getIdValue("Id").toString().getBytes()));
@@ -368,11 +385,11 @@ public class Util {
 			String fName = (contentData.getFilenm());
 			String tmpdir = System.getProperty("java.io.tmpdir");
 			fName = tmpdir + java.io.File.separator + fName;
-			if(!writeFile(contentData.getContent(), fName)) {
-				log.debug("Error generating content: "+fName);
+			if (!writeFile(contentData.getContent(), fName)) {
+				log.debug("Error generating content: " + fName);
 				return false;
-			}else {
-				log.debug("Generated content: "+fName);
+			} else {
+				log.debug("Generated content: " + fName);
 			}
 		}
 		return true;

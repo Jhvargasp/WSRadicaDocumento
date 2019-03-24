@@ -18,6 +18,8 @@ public class InsertDocRq  implements java.io.Serializable {
 
     private com.intent.filenet.cews.WSDLFile.ContentData[] contents;
 
+    private com.intent.filenet.cews.WSDLFile.ContentData[] attachments;
+
     public InsertDocRq() {
     }
 
@@ -26,12 +28,14 @@ public class InsertDocRq  implements java.io.Serializable {
            java.lang.String docClass,
            java.lang.String path,
            com.intent.filenet.cews.WSDLFile.Metadata[] properties,
-           com.intent.filenet.cews.WSDLFile.ContentData[] contents) {
+           com.intent.filenet.cews.WSDLFile.ContentData[] contents,
+           com.intent.filenet.cews.WSDLFile.ContentData[] attachments) {
            this.objectStore = objectStore;
            this.docClass = docClass;
            this.path = path;
            this.properties = properties;
            this.contents = contents;
+           this.attachments = attachments;
     }
 
 
@@ -134,6 +138,26 @@ public class InsertDocRq  implements java.io.Serializable {
         this.contents = contents;
     }
 
+
+    /**
+     * Gets the attachments value for this InsertDocRq.
+     * 
+     * @return attachments
+     */
+    public com.intent.filenet.cews.WSDLFile.ContentData[] getAttachments() {
+        return attachments;
+    }
+
+
+    /**
+     * Sets the attachments value for this InsertDocRq.
+     * 
+     * @param attachments
+     */
+    public void setAttachments(com.intent.filenet.cews.WSDLFile.ContentData[] attachments) {
+        this.attachments = attachments;
+    }
+
     private java.lang.Object __equalsCalc = null;
     public synchronized boolean equals(java.lang.Object obj) {
         if (!(obj instanceof InsertDocRq)) return false;
@@ -160,7 +184,10 @@ public class InsertDocRq  implements java.io.Serializable {
               java.util.Arrays.equals(this.properties, other.getProperties()))) &&
             ((this.contents==null && other.getContents()==null) || 
              (this.contents!=null &&
-              java.util.Arrays.equals(this.contents, other.getContents())));
+              java.util.Arrays.equals(this.contents, other.getContents()))) &&
+            ((this.attachments==null && other.getAttachments()==null) || 
+             (this.attachments!=null &&
+              java.util.Arrays.equals(this.attachments, other.getAttachments())));
         __equalsCalc = null;
         return _equals;
     }
@@ -197,6 +224,17 @@ public class InsertDocRq  implements java.io.Serializable {
                  i<java.lang.reflect.Array.getLength(getContents());
                  i++) {
                 java.lang.Object obj = java.lang.reflect.Array.get(getContents(), i);
+                if (obj != null &&
+                    !obj.getClass().isArray()) {
+                    _hashCode += obj.hashCode();
+                }
+            }
+        }
+        if (getAttachments() != null) {
+            for (int i=0;
+                 i<java.lang.reflect.Array.getLength(getAttachments());
+                 i++) {
+                java.lang.Object obj = java.lang.reflect.Array.get(getAttachments(), i);
                 if (obj != null &&
                     !obj.getClass().isArray()) {
                     _hashCode += obj.hashCode();
@@ -241,6 +279,13 @@ public class InsertDocRq  implements java.io.Serializable {
         elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("contents");
         elemField.setXmlName(new javax.xml.namespace.QName("", "Contents"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://cews.filenet.intent.com/WSDLFile/", "ContentData"));
+        elemField.setNillable(false);
+        elemField.setItemQName(new javax.xml.namespace.QName("", "Data"));
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("attachments");
+        elemField.setXmlName(new javax.xml.namespace.QName("", "Attachments"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://cews.filenet.intent.com/WSDLFile/", "ContentData"));
         elemField.setNillable(false);
         elemField.setItemQName(new javax.xml.namespace.QName("", "Data"));
