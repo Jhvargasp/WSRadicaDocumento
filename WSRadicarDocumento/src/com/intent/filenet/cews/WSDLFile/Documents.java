@@ -1,5 +1,5 @@
 /**
- * SearchDocRs.java
+ * Documents.java
  *
  * This file was auto-generated from WSDL
  * by the Apache Axis 1.4 Apr 22, 2006 (06:55:48 PDT) WSDL2Java emitter.
@@ -7,92 +7,52 @@
 
 package com.intent.filenet.cews.WSDLFile;
 
-public class SearchDocRs  implements java.io.Serializable {
-    private java.lang.String operationStatCd;
-
-    private java.lang.String errStatDesc;
-
-    private com.intent.filenet.cews.WSDLFile.Metadata[][] documents;
+public class Documents  implements java.io.Serializable {
+    private com.intent.filenet.cews.WSDLFile.Metadata[][] document;
 
     private com.intent.filenet.cews.WSDLFile.ContentData[] replyContent;
 
-    public SearchDocRs() {
+    public Documents() {
     }
 
-    public SearchDocRs(
-           java.lang.String operationStatCd,
-           java.lang.String errStatDesc,
-           com.intent.filenet.cews.WSDLFile.Metadata[][] documents,
+    public Documents(
+           com.intent.filenet.cews.WSDLFile.Metadata[][] document,
            com.intent.filenet.cews.WSDLFile.ContentData[] replyContent) {
-           this.operationStatCd = operationStatCd;
-           this.errStatDesc = errStatDesc;
-           this.documents = documents;
+           this.document = document;
            this.replyContent = replyContent;
     }
 
 
     /**
-     * Gets the operationStatCd value for this SearchDocRs.
+     * Gets the document value for this Documents.
      * 
-     * @return operationStatCd
+     * @return document
      */
-    public java.lang.String getOperationStatCd() {
-        return operationStatCd;
+    public com.intent.filenet.cews.WSDLFile.Metadata[][] getDocument() {
+        return document;
     }
 
 
     /**
-     * Sets the operationStatCd value for this SearchDocRs.
+     * Sets the document value for this Documents.
      * 
-     * @param operationStatCd
+     * @param document
      */
-    public void setOperationStatCd(java.lang.String operationStatCd) {
-        this.operationStatCd = operationStatCd;
+    public void setDocument(com.intent.filenet.cews.WSDLFile.Metadata[][] document) {
+        this.document = document;
+    }
+
+    public com.intent.filenet.cews.WSDLFile.Metadata[] getDocument(int i) {
+        return this.document[i];
+    }
+
+    public void setDocument(int i, com.intent.filenet.cews.WSDLFile.Metadata[] _value) {
+        this.document[i] = _value;
     }
 
 
     /**
-     * Gets the errStatDesc value for this SearchDocRs.
-     * 
-     * @return errStatDesc
-     */
-    public java.lang.String getErrStatDesc() {
-        return errStatDesc;
-    }
-
-
-    /**
-     * Sets the errStatDesc value for this SearchDocRs.
-     * 
-     * @param errStatDesc
-     */
-    public void setErrStatDesc(java.lang.String errStatDesc) {
-        this.errStatDesc = errStatDesc;
-    }
-
-
-    /**
-     * Gets the documents value for this SearchDocRs.
-     * 
-     * @return documents
-     */
-    public com.intent.filenet.cews.WSDLFile.Metadata[][] getDocuments() {
-        return documents;
-    }
-
-
-    /**
-     * Sets the documents value for this SearchDocRs.
-     * 
-     * @param documents
-     */
-    public void setDocuments(com.intent.filenet.cews.WSDLFile.Metadata[][] documents) {
-        this.documents = documents;
-    }
-
-
-    /**
-     * Gets the replyContent value for this SearchDocRs.
+     * Gets the replyContent value for this Documents.
      * 
      * @return replyContent
      */
@@ -102,7 +62,7 @@ public class SearchDocRs  implements java.io.Serializable {
 
 
     /**
-     * Sets the replyContent value for this SearchDocRs.
+     * Sets the replyContent value for this Documents.
      * 
      * @param replyContent
      */
@@ -112,8 +72,8 @@ public class SearchDocRs  implements java.io.Serializable {
 
     private java.lang.Object __equalsCalc = null;
     public synchronized boolean equals(java.lang.Object obj) {
-        if (!(obj instanceof SearchDocRs)) return false;
-        SearchDocRs other = (SearchDocRs) obj;
+        if (!(obj instanceof Documents)) return false;
+        Documents other = (Documents) obj;
         if (obj == null) return false;
         if (this == obj) return true;
         if (__equalsCalc != null) {
@@ -122,15 +82,9 @@ public class SearchDocRs  implements java.io.Serializable {
         __equalsCalc = obj;
         boolean _equals;
         _equals = true && 
-            ((this.operationStatCd==null && other.getOperationStatCd()==null) || 
-             (this.operationStatCd!=null &&
-              this.operationStatCd.equals(other.getOperationStatCd()))) &&
-            ((this.errStatDesc==null && other.getErrStatDesc()==null) || 
-             (this.errStatDesc!=null &&
-              this.errStatDesc.equals(other.getErrStatDesc()))) &&
-            ((this.documents==null && other.getDocuments()==null) || 
-             (this.documents!=null &&
-              java.util.Arrays.equals(this.documents, other.getDocuments()))) &&
+            ((this.document==null && other.getDocument()==null) || 
+             (this.document!=null &&
+              java.util.Arrays.equals(this.document, other.getDocument()))) &&
             ((this.replyContent==null && other.getReplyContent()==null) || 
              (this.replyContent!=null &&
               java.util.Arrays.equals(this.replyContent, other.getReplyContent())));
@@ -145,17 +99,11 @@ public class SearchDocRs  implements java.io.Serializable {
         }
         __hashCodeCalc = true;
         int _hashCode = 1;
-        if (getOperationStatCd() != null) {
-            _hashCode += getOperationStatCd().hashCode();
-        }
-        if (getErrStatDesc() != null) {
-            _hashCode += getErrStatDesc().hashCode();
-        }
-        if (getDocuments() != null) {
+        if (getDocument() != null) {
             for (int i=0;
-                 i<java.lang.reflect.Array.getLength(getDocuments());
+                 i<java.lang.reflect.Array.getLength(getDocument());
                  i++) {
-                java.lang.Object obj = java.lang.reflect.Array.get(getDocuments(), i);
+                java.lang.Object obj = java.lang.reflect.Array.get(getDocument(), i);
                 if (obj != null &&
                     !obj.getClass().isArray()) {
                     _hashCode += obj.hashCode();
@@ -179,29 +127,17 @@ public class SearchDocRs  implements java.io.Serializable {
 
     // Type metadata
     private static org.apache.axis.description.TypeDesc typeDesc =
-        new org.apache.axis.description.TypeDesc(SearchDocRs.class, true);
+        new org.apache.axis.description.TypeDesc(Documents.class, true);
 
     static {
-        typeDesc.setXmlType(new javax.xml.namespace.QName("http://cews.filenet.intent.com/WSDLFile/", ">SearchDocRs"));
+        typeDesc.setXmlType(new javax.xml.namespace.QName("http://cews.filenet.intent.com/WSDLFile/", "Documents"));
         org.apache.axis.description.ElementDesc elemField = new org.apache.axis.description.ElementDesc();
-        elemField.setFieldName("operationStatCd");
-        elemField.setXmlName(new javax.xml.namespace.QName("", "OperationStatCd"));
-        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
-        elemField.setNillable(false);
-        typeDesc.addFieldDesc(elemField);
-        elemField = new org.apache.axis.description.ElementDesc();
-        elemField.setFieldName("errStatDesc");
-        elemField.setXmlName(new javax.xml.namespace.QName("", "ErrStatDesc"));
-        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
+        elemField.setFieldName("document");
+        elemField.setXmlName(new javax.xml.namespace.QName("", "Document"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://cews.filenet.intent.com/WSDLFile/", "Document"));
         elemField.setMinOccurs(0);
         elemField.setNillable(false);
-        typeDesc.addFieldDesc(elemField);
-        elemField = new org.apache.axis.description.ElementDesc();
-        elemField.setFieldName("documents");
-        elemField.setXmlName(new javax.xml.namespace.QName("", "Documents"));
-        elemField.setXmlType(new javax.xml.namespace.QName("http://cews.filenet.intent.com/WSDLFile/", "Document"));
-        elemField.setNillable(false);
-        elemField.setItemQName(new javax.xml.namespace.QName("", "Document"));
+        elemField.setMaxOccursUnbounded(true);
         typeDesc.addFieldDesc(elemField);
         elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("replyContent");

@@ -18,6 +18,7 @@ import com.intent.admin.filenetp8.PEUtils;
 import com.intent.admin.filenetp8.UtilFilenetP8;
 
 import java.io.ByteArrayOutputStream;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.PrintStream;
@@ -112,9 +113,87 @@ public class Util {
 			// mx.com.metlife.filenet.cews.WSDLFile.Document[] arrayOfMetadata = new
 			// mx.com.metlife.filenet.cews.WSDLFile.Document[localList2.size()];
 			int i = localList2.size();
-			Metadata[][] arrayOfDocuments = new Metadata[i][];
+			//Documents arrayOfDocuments = new Documents();
+			//arrayOfDocuments.setDocument(new Metadata[i][]);
+			 Metadata[][] arrayOfDocuments = new Metadata[i][];
+			 ContentData[] replyContent=new ContentData[i];
 			for (int j = 0; j < i; j++) {
 				HashMap localHashMap2 = (HashMap) localList2.get(j);
+				if (localHashMap2.containsKey("EnlaceCierre")) {
+					ContentData c = new ContentData();
+					c.setFilenm("test");
+					c.setContent("test".getBytes());
+					try {
+
+						Object dReply = localHashMap2.get("ComunicacionAsociada");
+						com.filenet.api.core.Document docReply = (com.filenet.api.core.Document) dReply;
+
+						ContentTransfer localTransportInputStream = (ContentTransfer) docReply.get_ContentElements()
+								.get(0);
+						InputStream localInputStream = localTransportInputStream.accessContentStream();
+
+						String property = "java.io.tmpdir";
+
+						String tempDir = System.getProperty(property);
+						String fileName = tempDir + java.io.File.separator
+								+ localTransportInputStream.get_RetrievalName();
+						FileOutputStream fos = new FileOutputStream(fileName);
+
+						try {
+							byte[] buffer = new byte[4096000];
+							int bytesRead = 0;
+							while ((bytesRead = localInputStream.read(buffer)) != -1) {
+								fos.write(buffer, 0, bytesRead);
+							}
+							
+							fos.close();
+							localInputStream.close();
+							System.out.println("done escribir bytes!");
+						} catch (Exception e) {
+							System.out.println("Error escribiendo bytes");
+							e.printStackTrace();
+						}
+						System.out.println("PRE.done leer bytes!");
+						
+						
+						java.io.File fileOut = new java.io.File(fileName);
+						long length = fileOut.length();
+						byte[] bytes = new byte[(int)length];
+
+				        // Read in the bytes
+				        int offset = 0;
+				        int numRead = 0;
+
+				        InputStream is = new FileInputStream(fileOut);
+				        try {
+				            while (offset < bytes.length
+				                   && (numRead=is.read(bytes, offset, bytes.length-offset)) >= 0) {
+				                offset += numRead;
+				            }
+				        } finally {
+				            is.close();
+				        }
+
+				        // Ensure all the bytes have been read in
+				        if (offset < bytes.length) {
+				            System.out.println("Could not completely read file "+fileOut.getName());
+				        }
+				        
+						//byte[] fileContent = Files.readAllBytes(fileOut.toPath());
+						System.out.println("Post. done leer bytes!");
+						//localTransportInputStream.accessContentStream().close();
+						c.setContent(bytes);
+						c.setFilenm(localTransportInputStream.get_RetrievalName());
+						System.out.println("done leer bytes!");
+						
+					} catch (Exception e) {
+						System.out.println("Error leyendo bytes");
+						e.printStackTrace();
+					}
+					replyContent[0] = c;
+					//arrayOfDocuments.setReplyContent( cArr);
+
+				}
 				Metadata[] arrayOfMetadata1 = new Metadata[arrayOfString.length];
 				// mx.com.metlife.filenet.cews.wsdlfile.Document document=new
 				// mx.com.metlife.filenet.cews.wsdlfile.Document();
@@ -142,11 +221,13 @@ public class Util {
 					// document.getMetadata().add(localMetadata);
 				}
 
-				arrayOfDocuments[j] = arrayOfMetadata1;
+				//arrayOfDocuments.setDocument(j, arrayOfMetadata1);
 				// arrayOfMetadata[j]=new mx.com.metlife.filenet.cews.WSDLFile.Document();
-				// arrayOfMetadata[j].setDocuments( arrayOfMetadata1);
+				arrayOfDocuments[j]=( arrayOfMetadata1);
 			}
 			localSearchDocRs.setDocuments(arrayOfDocuments);
+			
+			localSearchDocRs.setReplyContent(replyContent);
 			localSearchDocRs.setErrStatDesc("");
 			localSearchDocRs.setOperationStatCd("000");
 			if (localList2.size() == 0) {
@@ -349,12 +430,11 @@ public class Util {
 						&& paramInsertDocRq.getAttachments()[0].getFilenm().length() > 0) {
 					writeFile(paramInsertDocRq.getAttachments());
 					localArrayList1.add("DocumentTitle");
-					localArrayList2.add("Anexo de la comunicación "+rad);
-					
+					localArrayList2.add("Anexo de la comunicación " + rad);
+
 					localArrayList1.add("TipoDocumental");
 					localArrayList2.add("ANEXOS");
-					
-					
+
 					com.filenet.api.core.Document localObject3 = localObject1.createDocumentAndContent(
 							(paramInsertDocRq.getPath()), "Anexos",
 							(String[]) localArrayList1.toArray(new String[localArrayList1.size()]),

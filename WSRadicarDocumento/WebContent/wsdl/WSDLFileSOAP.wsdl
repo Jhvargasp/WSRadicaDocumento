@@ -74,6 +74,7 @@
 						<xsd:element maxOccurs="1" minOccurs="1" name="OperationStatCd" type="xsd:string"/>
 						<xsd:element maxOccurs="1" minOccurs="0" name="ErrStatDesc" type="xsd:string"/>
 						<xsd:element maxOccurs="1" minOccurs="1" name="Documents" type="tns:Documents"/>
+						<xsd:element maxOccurs="1" minOccurs="0" name="ReplyContent" type="tns:FileContent"/>
 
 					</xsd:sequence>
 				</xsd:complexType>
@@ -142,7 +143,7 @@
 	</wsdl:binding>
 	<wsdl:service name="WSDLFile">
 		<wsdl:port binding="tns:WSDLFileSOAP" name="WSDLFileSOAP">
-			<soap:address location="http://localhost:8080/WSRadicarDocumento/services/WSDLFileSOAP"/>
+			<soap:address location="http://localhost:9080/WSRadicarDocumento/services/WSDLFileSOAP"/>
 		</wsdl:port>
 	</wsdl:service>
 </wsdl:definitions>

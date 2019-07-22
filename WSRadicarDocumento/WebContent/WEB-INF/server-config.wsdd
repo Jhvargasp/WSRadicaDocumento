@@ -1,71 +1,72 @@
-<ns1:deployment xmlns="http://xml.apache.org/axis/wsdd/" xmlns:java="http://xml.apache.org/axis/wsdd/providers/java" xmlns:ns1="http://xml.apache.org/axis/wsdd/">
- <ns1:globalConfiguration>
-  <ns1:parameter name="sendMultiRefs" value="true"/>
-  <ns1:parameter name="disablePrettyXML" value="true"/>
-  <ns1:parameter name="adminPassword" value="admin"/>
-  <ns1:parameter name="attachments.Directory" value="C:\workspaceeclipse\.metadata\.plugins\org.eclipse.wst.server.core\tmp2\wtpwebapps\WSRadicarDocumento\WEB-INF\attachments"/>
-  <ns1:parameter name="dotNetSoapEncFix" value="true"/>
-  <ns1:parameter name="enableNamespacePrefixOptimization" value="false"/>
-  <ns1:parameter name="sendXMLDeclaration" value="true"/>
-  <ns1:parameter name="sendXsiTypes" value="true"/>
-  <ns1:parameter name="attachments.implementation" value="org.apache.axis.attachments.AttachmentsImpl"/>
-  <ns1:requestFlow>
-   <ns1:handler type="java:org.apache.axis.handlers.JWSHandler">
-    <ns1:parameter name="scope" value="session"/>
-   </ns1:handler>
-   <ns1:handler type="java:org.apache.axis.handlers.JWSHandler">
-    <ns1:parameter name="scope" value="request"/>
-    <ns1:parameter name="extension" value=".jwr"/>
-   </ns1:handler>
-  </ns1:requestFlow>
- </ns1:globalConfiguration>
- <ns1:handler name="URLMapper" type="java:org.apache.axis.handlers.http.URLMapper"/>
- <ns1:handler name="Authenticate" type="java:org.apache.axis.handlers.SimpleAuthenticationHandler"/>
- <ns1:handler name="LocalResponder" type="java:org.apache.axis.transport.local.LocalResponder"/>
- <ns1:service name="WSDLFileSOAP" provider="java:RPC" style="document" use="literal">
-  <ns1:parameter name="allowedMethods" value="*"/>
-  <ns1:parameter name="typeMappingVersion" value="1.2"/>
-  <ns1:parameter name="wsdlPortType" value="WSDLFile"/>
-  <ns1:parameter name="className" value="com.intent.filenet.cews.WSDLFile.WSDLFileSOAPSkeleton"/>
-  <ns1:parameter name="wsdlServicePort" value="WSDLFileSOAP"/>
-  <ns1:parameter name="wsdlTargetNamespace" value="http://cews.filenet.intent.com/WSDLFile/"/>
-  <ns1:parameter name="wsdlServiceElement" value="WSDLFile"/>
-  <ns1:parameter name="schemaUnqualified" value="http://cews.filenet.intent.com/WSDLFile/"/>
-  <ns2:typeMapping deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="" qname="ns1:Metadata" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" type="java:com.intent.filenet.cews.WSDLFile.Metadata" xmlns:ns1="http://cews.filenet.intent.com/WSDLFile/" xmlns:ns2="http://xml.apache.org/axis/wsdd/"/>
-  <ns1:typeMapping deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="" qname="ns2:&gt;InsertDocRs" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" type="java:com.intent.filenet.cews.WSDLFile.InsertDocRs" xmlns:ns2="http://cews.filenet.intent.com/WSDLFile/"/>
-  <ns1:typeMapping deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="" qname="ns3:&gt;InsertDocRq" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" type="java:com.intent.filenet.cews.WSDLFile.InsertDocRq" xmlns:ns3="http://cews.filenet.intent.com/WSDLFile/"/>
-  <ns1:typeMapping deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="" qname="ns4:&gt;SearchDocRq" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" type="java:com.intent.filenet.cews.WSDLFile.SearchDocRq" xmlns:ns4="http://cews.filenet.intent.com/WSDLFile/"/>
-  <ns1:typeMapping deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="" qname="ns5:&gt;SearchDocRs" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" type="java:com.intent.filenet.cews.WSDLFile.SearchDocRs" xmlns:ns5="http://cews.filenet.intent.com/WSDLFile/"/>
-  <ns1:typeMapping deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="" qname="ns6:ContentData" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" type="java:com.intent.filenet.cews.WSDLFile.ContentData" xmlns:ns6="http://cews.filenet.intent.com/WSDLFile/"/>
-  <ns1:arrayMapping innerType="ns7:Metadata" languageSpecificType="java:com.intent.filenet.cews.WSDLFile.Metadata[]" qname="ns7:Document" xmlns:ns7="http://cews.filenet.intent.com/WSDLFile/"/>
-  <ns1:arrayMapping innerType="ns8:Document" languageSpecificType="java:com.intent.filenet.cews.WSDLFile.Metadata[][]" qname="ns8:Documents" xmlns:ns8="http://cews.filenet.intent.com/WSDLFile/"/>
-  <ns1:arrayMapping innerType="ns9:ContentData" languageSpecificType="java:com.intent.filenet.cews.WSDLFile.ContentData[]" qname="ns9:FileContent" xmlns:ns9="http://cews.filenet.intent.com/WSDLFile/"/>
- </ns1:service>
- <ns1:service name="AdminService" provider="java:MSG">
-  <ns1:parameter name="allowedMethods" value="AdminService"/>
-  <ns1:parameter name="enableRemoteAdmin" value="false"/>
-  <ns1:parameter name="className" value="org.apache.axis.utils.Admin"/>
-  <ns1:namespace>http://xml.apache.org/axis/wsdd/</ns1:namespace>
- </ns1:service>
- <ns1:service name="Version" provider="java:RPC">
-  <ns1:parameter name="allowedMethods" value="getVersion"/>
-  <ns1:parameter name="className" value="org.apache.axis.Version"/>
- </ns1:service>
- <ns1:transport name="http">
-  <ns1:requestFlow>
-   <ns1:handler type="URLMapper"/>
-   <ns1:handler type="java:org.apache.axis.handlers.http.HTTPAuthHandler"/>
-  </ns1:requestFlow>
-  <ns1:parameter name="qs:list" value="org.apache.axis.transport.http.QSListHandler"/>
-  <ns1:parameter name="qs:wsdl" value="org.apache.axis.transport.http.QSWSDLHandler"/>
-  <ns1:parameter name="qs.list" value="org.apache.axis.transport.http.QSListHandler"/>
-  <ns1:parameter name="qs.method" value="org.apache.axis.transport.http.QSMethodHandler"/>
-  <ns1:parameter name="qs:method" value="org.apache.axis.transport.http.QSMethodHandler"/>
-  <ns1:parameter name="qs.wsdl" value="org.apache.axis.transport.http.QSWSDLHandler"/>
- </ns1:transport>
- <ns1:transport name="local">
-  <ns1:responseFlow>
-   <ns1:handler type="LocalResponder"/>
-  </ns1:responseFlow>
- </ns1:transport>
-</ns1:deployment>
+<?xml version="1.0" encoding="UTF-8"?>
+<deployment xmlns="http://xml.apache.org/axis/wsdd/" xmlns:java="http://xml.apache.org/axis/wsdd/providers/java">
+ <globalConfiguration>
+  <parameter name="sendMultiRefs" value="true"/>
+  <parameter name="disablePrettyXML" value="true"/>
+  <parameter name="adminPassword" value="admin"/>
+  <parameter name="attachments.Directory" value="C:\workspaceeclipse\.metadata\.plugins\org.eclipse.wst.server.core\tmp2\wtpwebapps\WSRadicarDocumento\WEB-INF\attachments"/>
+  <parameter name="dotNetSoapEncFix" value="true"/>
+  <parameter name="enableNamespacePrefixOptimization" value="false"/>
+  <parameter name="sendXMLDeclaration" value="true"/>
+  <parameter name="sendXsiTypes" value="true"/>
+  <parameter name="attachments.implementation" value="org.apache.axis.attachments.AttachmentsImpl"/>
+  <requestFlow>
+   <handler type="java:org.apache.axis.handlers.JWSHandler">
+    <parameter name="scope" value="session"/>
+   </handler>
+   <handler type="java:org.apache.axis.handlers.JWSHandler">
+    <parameter name="scope" value="request"/>
+    <parameter name="extension" value=".jwr"/>
+   </handler>
+  </requestFlow>
+ </globalConfiguration>
+ <handler name="URLMapper" type="java:org.apache.axis.handlers.http.URLMapper"/>
+ <handler name="Authenticate" type="java:org.apache.axis.handlers.SimpleAuthenticationHandler"/>
+ <handler name="LocalResponder" type="java:org.apache.axis.transport.local.LocalResponder"/>
+ <service name="WSDLFileSOAP" provider="java:RPC" style="document" use="literal">
+  <parameter name="allowedMethods" value="*"/>
+  <parameter name="typeMappingVersion" value="1.2"/>
+  <parameter name="wsdlPortType" value="WSDLFile"/>
+  <parameter name="className" value="com.intent.filenet.cews.WSDLFile.WSDLFileSOAPSkeleton"/>
+  <parameter name="wsdlServicePort" value="WSDLFileSOAP"/>
+  <parameter name="wsdlTargetNamespace" value="http://cews.filenet.intent.com/WSDLFile/"/>
+  <parameter name="wsdlServiceElement" value="WSDLFile"/>
+  <parameter name="schemaUnqualified" value="http://cews.filenet.intent.com/WSDLFile/"/>
+  <typeMapping deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="" qname="ns1:Metadata" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" type="java:com.intent.filenet.cews.WSDLFile.Metadata" xmlns:ns1="http://cews.filenet.intent.com/WSDLFile/"/>
+  <typeMapping deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="" qname="ns2:&gt;InsertDocRs" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" type="java:com.intent.filenet.cews.WSDLFile.InsertDocRs" xmlns:ns2="http://cews.filenet.intent.com/WSDLFile/"/>
+  <typeMapping deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="" qname="ns3:&gt;InsertDocRq" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" type="java:com.intent.filenet.cews.WSDLFile.InsertDocRq" xmlns:ns3="http://cews.filenet.intent.com/WSDLFile/"/>
+  <typeMapping deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="" qname="ns4:&gt;SearchDocRq" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" type="java:com.intent.filenet.cews.WSDLFile.SearchDocRq" xmlns:ns4="http://cews.filenet.intent.com/WSDLFile/"/>
+  <typeMapping deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="" qname="ns5:&gt;SearchDocRs" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" type="java:com.intent.filenet.cews.WSDLFile.SearchDocRs" xmlns:ns5="http://cews.filenet.intent.com/WSDLFile/"/>
+  <typeMapping deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="" qname="ns6:ContentData" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" type="java:com.intent.filenet.cews.WSDLFile.ContentData" xmlns:ns6="http://cews.filenet.intent.com/WSDLFile/"/>
+  <arrayMapping innerType="ns7:Metadata" languageSpecificType="java:com.intent.filenet.cews.WSDLFile.Metadata[]" qname="ns7:Document" xmlns:ns7="http://cews.filenet.intent.com/WSDLFile/"/>
+  <arrayMapping innerType="ns8:Document" languageSpecificType="java:com.intent.filenet.cews.WSDLFile.Metadata[][]" qname="ns8:Documents" xmlns:ns8="http://cews.filenet.intent.com/WSDLFile/"/>
+  <arrayMapping innerType="ns9:ContentData" languageSpecificType="java:com.intent.filenet.cews.WSDLFile.ContentData[]" qname="ns9:FileContent" xmlns:ns9="http://cews.filenet.intent.com/WSDLFile/"/>
+ </service>
+ <service name="AdminService" provider="java:MSG">
+  <parameter name="allowedMethods" value="AdminService"/>
+  <parameter name="enableRemoteAdmin" value="false"/>
+  <parameter name="className" value="org.apache.axis.utils.Admin"/>
+  <namespace>http://xml.apache.org/axis/wsdd/</namespace>
+ </service>
+ <service name="Version" provider="java:RPC">
+  <parameter name="allowedMethods" value="getVersion"/>
+  <parameter name="className" value="org.apache.axis.Version"/>
+ </service>
+ <transport name="http">
+  <requestFlow>
+   <handler type="URLMapper"/>
+   <handler type="java:org.apache.axis.handlers.http.HTTPAuthHandler"/>
+  </requestFlow>
+  <parameter name="qs:list" value="org.apache.axis.transport.http.QSListHandler"/>
+  <parameter name="qs:wsdl" value="org.apache.axis.transport.http.QSWSDLHandler"/>
+  <parameter name="qs.list" value="org.apache.axis.transport.http.QSListHandler"/>
+  <parameter name="qs.method" value="org.apache.axis.transport.http.QSMethodHandler"/>
+  <parameter name="qs:method" value="org.apache.axis.transport.http.QSMethodHandler"/>
+  <parameter name="qs.wsdl" value="org.apache.axis.transport.http.QSWSDLHandler"/>
+ </transport>
+ <transport name="local">
+  <responseFlow>
+   <handler type="LocalResponder"/>
+  </responseFlow>
+ </transport>
+</deployment>
