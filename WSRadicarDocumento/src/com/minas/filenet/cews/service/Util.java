@@ -1,41 +1,36 @@
 package com.minas.filenet.cews.service;
 
-import com.filenet.api.constants.Cardinality;
-import com.filenet.api.constants.TypeID;
-import com.filenet.api.core.ContentTransfer;
-import com.filenet.api.core.Factory.Folder;
-import com.filenet.api.util.Id;
-import com.filenet.wcm.api.BadReferenceException;
-import com.filenet.wcm.api.BaseRuntimeException;
-import com.filenet.wcm.api.Document;
-import com.filenet.wcm.api.InvalidContentEngineClassException;
-import com.filenet.wcm.api.InvalidCredentialsException;
-import com.filenet.wcm.api.ReadOnlyObjectException;
-import com.filenet.wcm.api.RemoteServerException;
-import com.filenet.wcm.api.TransportInputStream;
-import com.filenet.wcm.api.UniquenessConstraintException;
-import com.intent.admin.filenetp8.PEUtils;
-import com.intent.admin.filenetp8.UtilFilenetP8;
-
-import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
-import java.io.PrintStream;
-import java.nio.file.Files;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ResourceBundle;
-import java.util.Set;
 
-import org.apache.commons.codec.binary.Base64;
 import org.apache.log4j.Logger;
-import com.minas.filenet.cews.service.*;
-import com.intent.filenet.cews.WSDLFile.*;
+
+import com.filenet.api.constants.Cardinality;
+import com.filenet.api.constants.TypeID;
+import com.filenet.api.core.ContentTransfer;
+import com.filenet.api.util.Id;
+import com.filenet.wcm.api.BadReferenceException;
+import com.filenet.wcm.api.BaseRuntimeException;
+import com.filenet.wcm.api.InvalidContentEngineClassException;
+import com.filenet.wcm.api.InvalidCredentialsException;
+import com.filenet.wcm.api.ReadOnlyObjectException;
+import com.filenet.wcm.api.RemoteServerException;
+import com.filenet.wcm.api.UniquenessConstraintException;
+import com.intent.admin.filenetp8.PEUtils;
+import com.intent.admin.filenetp8.UtilFilenetP8;
+import com.intent.filenet.cews.WSDLFile.ContentData;
+import com.intent.filenet.cews.WSDLFile.InsertDocRq;
+import com.intent.filenet.cews.WSDLFile.InsertDocRs;
+import com.intent.filenet.cews.WSDLFile.Metadata;
+import com.intent.filenet.cews.WSDLFile.SearchDocRq;
+import com.intent.filenet.cews.WSDLFile.SearchDocRs;
 import com.intent.logic.LabelGenerator;
 
 public class Util {
@@ -127,7 +122,8 @@ public class Util {
 
 						Object dReply = localHashMap2.get("ComunicacionAsociada");
 						com.filenet.api.core.Document docReply = (com.filenet.api.core.Document) dReply;
-
+						docReply = (com.filenet.api.core.Document)docReply.get_VersionSeries().get_ReleasedVersion(); 
+						
 						ContentTransfer localTransportInputStream = (ContentTransfer) docReply.get_ContentElements()
 								.get(0);
 						InputStream localInputStream = localTransportInputStream.accessContentStream();
@@ -430,7 +426,7 @@ public class Util {
 						&& paramInsertDocRq.getAttachments()[0].getFilenm().length() > 0) {
 					writeFile(paramInsertDocRq.getAttachments());
 					localArrayList1.add("DocumentTitle");
-					localArrayList2.add("Anexo de la comunicación " + rad);
+					localArrayList2.add("Anexo de la comunicaciï¿½n " + rad);
 
 					localArrayList1.add("TipoDocumental");
 					localArrayList2.add("ANEXOS");
@@ -490,10 +486,10 @@ public class Util {
 	}
 
 	private String createRadicado() {
-		String template = "";
-		String autoNum = "";
+		String template = "TEMPLATEENTRANTE";
+		String autoNum = "correspondencia";
 
-		String tipoDoc = "OFICIO";
+		/*String tipoDoc = "OFICIO";
 		if (tipoDoc.equalsIgnoreCase("OFICIO") || tipoDoc.equalsIgnoreCase("MEMORANDO")) {
 			template = "TEMPLATE1";
 			autoNum = "correspondencia";
@@ -501,7 +497,7 @@ public class Util {
 			template = "TEMPLATEINTC";
 			autoNum = "circular";
 		}
-
+*/
 		String params[] = new String[] {};
 
 		log.debug("template" + template);
