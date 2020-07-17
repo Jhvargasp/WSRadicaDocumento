@@ -952,14 +952,16 @@ public class UtilFilenetP8 {
 					System.out.println("Card.." + objPropDesc.get_Cardinality());
 					if (objPropDesc.get_Cardinality().equals(Cardinality.LIST)) {
 						Object[] obs = ((String) values[i]).split(this.multivalueSplit);
-						Values vs = ObjectFactory.getValues();
+						StringList strList=Factory.StringList.createList();
 						for (int j = 0; j < obs.length; j++) {
 							Value v = ObjectFactory.getValue();
 							setValueValueP8(v, obs[j]);
 							vs.add(v);
+							strList.add(obs[j]);
 							
 						}
-						setValuePropertyP8(doc, objPropDesc, vs);
+						setValuePropertyP8(doc, objPropDesc, strList);
+					
 					} else if (objPropDesc.get_Cardinality().equals(Cardinality.SINGLE)) {
 						setValuePropertyP8(doc, objPropDesc, values[i]);
 					}
